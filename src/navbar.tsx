@@ -14,7 +14,7 @@ function ResponsiveAppBar() {
                         component="a"
                         href="#"
                         sx={{
-                            mr: 1, // Adjust spacing if needed
+                            mr: 1,
                             display: { xs: 'none', md: 'flex' },
                             fontFamily: 'monospace',
                             fontWeight: 700,
