@@ -1,89 +1,76 @@
-import * as React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
+
+interface Row {
+    id: number;
+    firstName: string | null;
+    lastName: string | null;
+    age: number | null;
+}
 
 interface PopUpProps {
-    onSubmit: (newData: { firstName: string, lastName: string, age: string, id: number }) => void;
-    rowToEdit: { id: number, firstName: string, lastName: string, age: string } | null;
-    open: boolean;
+    initialData: Row | null;
+    onSubmit: (updatedRow: Row) => void;
     onClose: () => void;
 }
 
-export default function PopUp({ onSubmit, rowToEdit, open, onClose }: PopUpProps) {
-    const [formData, setFormData] = React.useState({
-        firstName: '',
-        lastName: '',
-        age: '',
-    });
+function PopUp({ initialData, onSubmit, onClose }: PopUpProps) {
+    const [formData, setFormData] = useState<Row>(
+        initialData || { id: 0, firstName: '', lastName: '', age: null } // Fallback default value
+    );
 
-    React.useEffect(() => {
-        if (rowToEdit) {
-            setFormData({
-                firstName: rowToEdit.firstName,
-                lastName: rowToEdit.lastName,
-                age: rowToEdit.age,
-            });
-        }
-    }, [rowToEdit]);
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: name === 'age' ? (value ? parseInt(value) : null) : value,
         }));
     };
 
     const handleSubmit = () => {
-        if (rowToEdit) {
-            onSubmit({ ...formData, id: rowToEdit.id });
+        if (formData) {
+            onSubmit(formData);
         }
-        onClose(); 
     };
 
     return (
-        <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Edit Details</DialogTitle>
+        <Dialog open={Boolean(initialData)} onClose={onClose}>
+            <DialogTitle>Edit Row</DialogTitle>
             <DialogContent>
                 <TextField
-                    autoFocus
-                    margin="dense"
-                    label="First Name"
-                    type="text"
-                    fullWidth
-                    variant="outlined"
                     name="firstName"
-                    value={formData.firstName}
+                    label="First Name"
+                    value={formData?.firstName || ''}
                     onChange={handleChange}
-                />
-                <TextField
-                    margin="dense"
-                    label="Last Name"
-                    type="text"
                     fullWidth
-                    variant="outlined"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
+                    margin="normal"
                 />
                 <TextField
-                    margin="dense"
+                    name="lastName"
+                    label="Last Name"
+                    value={formData?.lastName || ''}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    name="age"
                     label="Age"
                     type="number"
-                    fullWidth
-                    variant="outlined"
-                    name="age"
-                    value={formData.age}
+                    value={formData?.age !== null ? formData.age : ''}
                     onChange={handleChange}
+                    fullWidth
+                    margin="normal"
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={handleSubmit} color="primary">
-                    Submit
+                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={handleSubmit} variant="contained" color="primary">
+                    Save
                 </Button>
             </DialogActions>
         </Dialog>
     );
 }
+
+export default PopUp;

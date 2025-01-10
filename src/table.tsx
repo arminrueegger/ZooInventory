@@ -4,21 +4,29 @@ import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import PopUp from './pop_up.tsx';
 
-function Table({ rows, setRows }) {
-    const [selectedRow, setSelectedRow] = React.useState(null);
+interface Row {
+    id: number;
+    firstName: string | null;
+    lastName: string | null;
+    age: number | null;
+}
+
+interface TableProps {
+    rows: Row[];
+    setRows: React.Dispatch<React.SetStateAction<Row[]>>;
+}
+
+function Table({ rows, setRows }: TableProps) {
+    const [selectedRow, setSelectedRow] = React.useState<Row | null>(null);
     const [isEditOpen, setIsEditOpen] = React.useState(false);
 
-    const handleEditClick = (row) => {
+    const handleEditClick = (row: Row) => {
         setSelectedRow(row);
         setIsEditOpen(true);
     };
 
-    const handleEditSubmit = (updatedData) => {
-        setRows((prevRows) =>
-            prevRows.map((row) =>
-                row.id === selectedRow.id ? { ...row, ...updatedData, age: parseInt(updatedData.age) } : row
-            )
-        );
+    const handleEditSubmit = (updatedRow: Row) => {
+        setRows((prevRows) => prevRows.map((row) => (row.id === updatedRow.id ? updatedRow : row)));
         setIsEditOpen(false);
     };
 
@@ -26,31 +34,13 @@ function Table({ rows, setRows }) {
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'firstName', headerName: 'First name', width: 130 },
         { field: 'lastName', headerName: 'Last name', width: 130 },
+        { field: 'age', headerName: 'Age', type: 'number', width: 90 },
         {
-            field: 'age',
-            headerName: 'Age',
-            type: 'number',
-            width: 90,
-        },
-        {
-            field: 'fullName',
-            headerName: 'Full name',
-            description: 'This column has a value getter and is not sortable.',
-            sortable: false,
-            width: 160,
-            valueGetter: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-        },
-        {
-            field: 'edit',
-            headerName: 'Edit',
-            width: 130,
+            field: 'actions',
+            headerName: 'Actions',
+            width: 150,
             renderCell: (params) => (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    onClick={() => handleEditClick(params.row)}
-                >
+                <Button variant="contained" onClick={() => handleEditClick(params.row)}>
                     Edit
                 </Button>
             ),
@@ -67,14 +57,11 @@ function Table({ rows, setRows }) {
                     sx={{ border: 0 }}
                 />
             </Paper>
-            {isEditOpen && (
+            {isEditOpen && selectedRow && (
                 <PopUp
+                    initialData={selectedRow}
                     onSubmit={handleEditSubmit}
-                    initialData={{
-                        firstName: selectedRow?.firstName || '',
-                        lastName: selectedRow?.lastName || '',
-                        age: selectedRow?.age?.toString() || '',
-                    }}
+                    onClose={() => setIsEditOpen(false)}
                 />
             )}
         </>
