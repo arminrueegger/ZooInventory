@@ -4,34 +4,31 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import Navbar from './navbar.tsx';
 import Table from './table.tsx';
-import PopUp from './pop_up.tsx';
-
-interface Row {
-  id: number;
-  firstName: string | null;
-  lastName: string | null;
-  age: number | null;
-}
+import AddPopUp from './PopUpAdd.tsx';
+import { Row } from './interfaces.ts';
 
 const App = () => {
   const [rows, setRows] = React.useState<Row[]>([
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+    { id: 1, name: 'Leo', art: 'Löwe', geburtstag: '1990-01-01', preis: 100 },
+    { id: 2, name: 'Dumbo', art: 'Elephant', geburtstag: null, preis: 200 },
+    { id: 3, name: 'Shere Khan', art: 'Tiger', geburtstag: '1985-05-15', preis: 150 },
+    { id: 4, name: 'Simba', art: 'Löwe', geburtstag: '2000-07-20', preis: 80 },
+    { id: 5, name: 'Manny', art: 'Elephant', geburtstag: null, preis: 50 },
+    { id: 6, name: 'Rajah', art: 'Tiger', geburtstag: '1975-10-10', preis: 300 },
+    { id: 7, name: 'Aslan', art: 'Löwe', geburtstag: '1999-03-25', preis: 180 },
+    { id: 8, name: 'Ella', art: 'Elephant', geburtstag: '1980-11-30', preis: 120 },
+    { id: 9, name: 'Bagheera', art: 'Tiger', geburtstag: null, preis: 250 },
+    { id: 10, name: 'Mufasa', art: 'Löwe', geburtstag: '1992-06-15', preis: 95 },
   ]);
 
-  const handleFormSubmit = (newData: { firstName: string; lastName: string; age: string }) => {
+
+  const handleFormSubmit = (newData: { name: string; art: string; geburtstag: string | null; preis: string }) => {
     const newRow: Row = {
       id: rows.length + 1,
-      firstName: newData.firstName,
-      lastName: newData.lastName,
-      age: newData.age ? parseInt(newData.age) : null,
+      name: newData.name,
+      art: newData.art as 'Löwe' | 'Elephant' | 'Tiger',
+      geburtstag: newData.geburtstag || null,
+      preis: parseInt(newData.preis, 10),
     };
     setRows((prevRows) => [...prevRows, newRow]);
   };
@@ -40,7 +37,7 @@ const App = () => {
       <StrictMode>
         <Navbar />
         <Table rows={rows} setRows={setRows} />
-        <PopUp onSubmit={handleFormSubmit} />
+        <AddPopUp handleSubmit={handleFormSubmit} />
       </StrictMode>
   );
 };

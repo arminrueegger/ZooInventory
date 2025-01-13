@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
-
-interface Row {
-    id: number;
-    firstName: string | null;
-    lastName: string | null;
-    age: number | null;
-}
+import { Row } from './interfaces.ts';
 
 interface PopUpProps {
     initialData: Row | null;
@@ -16,14 +10,14 @@ interface PopUpProps {
 
 function PopUp({ initialData, onSubmit, onClose }: PopUpProps) {
     const [formData, setFormData] = useState<Row>(
-        initialData || { id: 0, firstName: '', lastName: '', age: null } // Fallback default value
+        initialData || { id: 0, name: '', art: 'Löwe', geburtstag: null, preis: 0 }
     );
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: name === 'age' ? (value ? parseInt(value) : null) : value,
+            [name]: name === 'preis' ? parseInt(value, 10) : value,
         }));
     };
 
@@ -38,26 +32,36 @@ function PopUp({ initialData, onSubmit, onClose }: PopUpProps) {
             <DialogTitle>Edit Row</DialogTitle>
             <DialogContent>
                 <TextField
-                    name="firstName"
-                    label="First Name"
-                    value={formData?.firstName || ''}
+                    name="name"
+                    label="Name"
+                    value={formData?.name || ''}
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
                 />
                 <TextField
-                    name="lastName"
-                    label="Last Name"
-                    value={formData?.lastName || ''}
+                    name="art"
+                    label="Art"
+                    value={formData?.art || ''}
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
                 />
                 <TextField
-                    name="age"
-                    label="Age"
+                    name="geburtstag"
+                    label="Geburtstag"
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                    value={formData?.geburtstag || ''}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    name="preis"
+                    label="Preis"
                     type="number"
-                    value={formData?.age !== null ? formData.age : ''}
+                    value={formData?.preis || 0}
                     onChange={handleChange}
                     fullWidth
                     margin="normal"

@@ -3,13 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import PopUp from './pop_up.tsx';
-
-interface Row {
-    id: number;
-    firstName: string | null;
-    lastName: string | null;
-    age: number | null;
-}
+import { Row } from './interfaces.ts';
 
 interface TableProps {
     rows: Row[];
@@ -26,15 +20,18 @@ function Table({ rows, setRows }: TableProps) {
     };
 
     const handleEditSubmit = (updatedRow: Row) => {
-        setRows((prevRows) => prevRows.map((row) => (row.id === updatedRow.id ? updatedRow : row)));
+        setRows((prevRows) =>
+            prevRows.map((row) => (row.id === updatedRow.id ? updatedRow : row))
+        );
         setIsEditOpen(false);
     };
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'firstName', headerName: 'First name', width: 130 },
-        { field: 'lastName', headerName: 'Last name', width: 130 },
-        { field: 'age', headerName: 'Age', type: 'number', width: 90 },
+        { field: 'name', headerName: 'Name', width: 150 },
+        { field: 'art', headerName: 'Art', width: 130 },
+        { field: 'geburtstag', headerName: 'Geburtstag', width: 130 },
+        { field: 'preis', headerName: 'Preis', type: 'number', width: 90 },
         {
             field: 'actions',
             headerName: 'Actions',
