@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 import { Row } from './interfaces.ts';
+import MenuItem from "@mui/material/MenuItem";
 
 interface PopUpProps {
     initialData: Row | null;
@@ -10,8 +11,9 @@ interface PopUpProps {
 
 function PopUp({ initialData, onSubmit, onClose }: PopUpProps) {
     const [formData, setFormData] = useState<Row>(
-        initialData || { id: 0, name: '', art: 'Löwe', geburtstag: null, preis: 0 }
+        initialData || { id: 0, name: '', art: 'Vogel', geburtstag: null, preis: 0 }
     );
+    const ART_OPTIONS = ['Säugetier', 'Fisch', 'Eiertier', 'Vogel'];
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -40,13 +42,20 @@ function PopUp({ initialData, onSubmit, onClose }: PopUpProps) {
                     margin="normal"
                 />
                 <TextField
+                    select
                     name="art"
                     label="Art"
-                    value={formData?.art || ''}
+                    value={formData.art}
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
-                />
+                >
+                    {ART_OPTIONS.map((option) => (
+                        <MenuItem key={option} value={option}>
+                            {option}
+                        </MenuItem>
+                    ))}
+                </TextField>
                 <TextField
                     name="geburtstag"
                     label="Geburtstag"

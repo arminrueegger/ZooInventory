@@ -6,18 +6,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { Fab } from '@mui/material';
 
 interface AddPopUpProps {
-    handleSubmit: (data: { name: string; art: 'Löwe' | 'Elephant' | 'Tiger'; geburtstag: string | null; preis: number }) => void;
+    handleSubmit: (data: { name: string; art: 'Säugetier' | 'Fisch' | 'Eiertier' | 'Vogel'; geburtstag: string | null; preis: number }) => void;
 }
 
-const ART_OPTIONS = ['Löwe', 'Elephant', 'Tiger'];
+const ART_OPTIONS = ['Säugetier', 'Fisch', 'Eiertier', 'Vogel'];
 
 const AddPopUp: React.FC<AddPopUpProps> = ({ handleSubmit }) => {
     const [open, setOpen] = React.useState(false);
     const [formData, setFormData] = React.useState({
         name: '',
-        art: 'Löwe',
+        art: 'Säugetier',
         geburtstag: '',
         preis: '',
     });
@@ -33,19 +34,34 @@ const AddPopUp: React.FC<AddPopUpProps> = ({ handleSubmit }) => {
         e.preventDefault();
         handleSubmit({
             name: formData.name,
-            art: formData.art as 'Löwe' | 'Elephant' | 'Tiger',
+            art: formData.art as 'Säugetier' | 'Fisch' | 'Eiertier' | 'Vogel',
             geburtstag: formData.geburtstag || null,
             preis: parseInt(formData.preis, 10),
         });
-        setFormData({ name: '', art: 'Löwe', geburtstag: '', preis: '' });
+        setFormData({ name: '', art: 'Säugetier', geburtstag: '', preis: '' });
         setOpen(false);
     };
 
     return (
         <>
-            <Button variant="outlined" onClick={() => setOpen(true)}>
-                Add Animal
-            </Button>
+            <Fab
+                size="large"
+                color="primary"
+                aria-label="add"
+                onClick={() => setOpen(true)}
+            >
+                <Button
+                    variant="outlined"
+                    sx={{
+                        minWidth: 'unset',
+                        fontSize: '2rem',
+                        fontWeight: 'bold',
+                        color: 'white',
+                    }}
+                >
+                    +
+                </Button>
+            </Fab>
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <form onSubmit={onFormSubmit}>
                     <DialogTitle>Add New Animal</DialogTitle>

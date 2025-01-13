@@ -46,7 +46,7 @@ function Table({ rows, setRows }: TableProps) {
 
     return (
         <>
-            <Paper sx={{ height: 400, width: '100%' }}>
+            <Paper sx={{ height: 400, width: '100%'}}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
