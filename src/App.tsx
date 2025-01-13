@@ -26,7 +26,7 @@ const App = () => {
     const newRow: Row = {
       id: rows.length + 1,
       name: newData.name,
-      art: newData.art as 'Löwe' | 'Elephant' | 'Tiger',
+      art: newData.art as 'Säugetier' | 'Fisch' | 'Eiertier' | 'Vogel',
       geburtstag: newData.geburtstag || null,
       preis: parseInt(newData.preis, 10),
     };
